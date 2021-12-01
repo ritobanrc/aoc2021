@@ -1,4 +1,4 @@
-// Credit to Repl.it Advent of Code Template
+// Based off Repl.it Advent of Code Template
 use std::env;
 use std::fs;
 use std::time::{Duration, Instant};

@@ -2,14 +2,12 @@
 
 # Credit to haskelling for this file. From https://github.com/haskelling/aoc2020/blob/main/get
 
-#cd "$(dirname "$0")"
-
 if [ -r .cookie ]; then
   source .cookie
 fi
 
 thisyear="$(date +%Y)"
-thismonth="$(date +%m)"
+thismonth="$(TZ=EST date +%m)"
 thisday="$(TZ=EST date +%d)"
 
 year=2021
@@ -18,9 +16,11 @@ for day in {1..25}; do
     exit 0
   fi
   filename="input/day$(printf '%02d' $day)".txt
+  #echo "Checking $filename"
   if [ -r "$filename" ]; then
     continue  # make sure we don't fetch the same file twice!
   fi
+  echo "$AOC_COOKIE"
   echo "Fetching $filename"
   curl -sS -o "$filename" -b "$AOC_COOKIE" https://adventofcode.com/"$year"/day/"$day"/input
 done
