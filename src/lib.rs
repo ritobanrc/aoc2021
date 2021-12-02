@@ -1,4 +1,5 @@
 mod day01;
+mod day02;
 
 pub fn noop(_inp: String) -> Box<dyn std::fmt::Debug> {
     Box::new(())
@@ -68,7 +69,8 @@ macro_rules! aoc {
 
 pub fn get_day(day: u32) -> (DayFn, DayFn) {
     return match day {
-        1 => aoc!(01),
+        1 => aoc!(01, 1722, 1748),
+        2 => aoc!(02),
         _ => {
             eprintln!("Unknown day: {}", day);
             return (noop, noop);
