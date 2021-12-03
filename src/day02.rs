@@ -1,4 +1,4 @@
-pub fn part1(input: String) -> i64 {
+pub fn part1(input: &str) -> i64 {
     let mut x = 0;
     let mut y = 0;
 
@@ -17,7 +17,7 @@ pub fn part1(input: String) -> i64 {
     x * y
 }
 
-pub fn part2(input: String) -> i64 {
+pub fn part2(input: &str) -> i64 {
     let mut x = 0;
     let mut y = 0;
     let mut aim = 0;

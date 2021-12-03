@@ -1,6 +1,6 @@
 use itertools::Itertools;
 
-pub fn part1(input: String) -> usize {
+pub fn part1(input: &str) -> usize {
     input
         .lines()
         .filter_map(|x| x.parse::<u32>().ok())
@@ -9,7 +9,7 @@ pub fn part1(input: String) -> usize {
         .count()
 }
 
-pub fn part2(input: String) -> usize {
+pub fn part2(input: &str) -> usize {
     input
         .lines()
         .filter_map(|x| x.parse::<u32>().ok())

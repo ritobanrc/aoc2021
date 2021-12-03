@@ -1,4 +1,4 @@
-pub fn part1(input: String) -> u32 {
+pub fn part1(input: &str) -> u32 {
     let nums: Vec<_> = input
         .lines()
         .map(|x| x.bytes().map(|x| x - b'0').collect::<Vec<_>>())
@@ -54,7 +54,7 @@ fn filter(mut nums: Vec<Vec<u8>>, o2: bool) -> u32 {
         .sum()
 }
 
-pub fn part2(input: String) -> u32 {
+pub fn part2(input: &str) -> u32 {
     let nums: Vec<_> = input
         .lines()
         .map(|x| x.bytes().map(|x| x - b'0').collect::<Vec<_>>())
@@ -82,6 +82,6 @@ fn test_day_3() {
 01010"
         .trim();
 
-    assert_eq!(198, part1(input.to_string()));
-    println!("{}", part2(input.to_string()));
+    assert_eq!(198, part1(input));
+    assert_eq!(230, part2(input));
 }
