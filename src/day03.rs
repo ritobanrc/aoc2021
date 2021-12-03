@@ -10,8 +10,9 @@ pub fn part1(input: &str) -> u32 {
 
     for col in 0..num_size {
         let ones = count_ones(&nums, col);
+        let zeros = count_zeros(&nums, col);
 
-        if ones >= nums.len() / 2 {
+        if ones >= zeros {
             gamma += 1 << (num_size - col - 1);
         } else {
             epsilon += 1 << (num_size - col - 1);
@@ -26,7 +27,7 @@ fn count_ones(nums: &[Vec<u8>], col: usize) -> usize {
 }
 
 fn count_zeros(nums: &[Vec<u8>], col: usize) -> usize {
-    nums.iter().filter(|num| num[col] == 0).count()
+    nums.len() - count_ones(nums, col)
 }
 
 fn filter(mut nums: Vec<Vec<u8>>, o2: bool) -> u32 {
