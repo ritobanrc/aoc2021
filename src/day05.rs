@@ -1,17 +1,17 @@
-use crate::Part::{self, Part2};
+use crate::Part;
 use nalgebra::Vector2;
 use parse_display::{Display, FromStr};
-use std::collections::HashMap;
+use rustc_hash::FxHashMap;
 
-type Point = Vector2<i32>;
+type IV = Vector2<i32>;
 
 #[derive(Display, Debug, FromStr)]
 #[display("{start.x},{start.y} -> {end.x},{end.y}")]
 struct Line {
     #[from_str(default)]
-    start: Point,
+    start: IV,
     #[from_str(default)]
-    end: Point,
+    end: IV,
 }
 
 pub fn solutions(input: &str, part: Part) -> usize {
@@ -20,16 +20,16 @@ pub fn solutions(input: &str, part: Part) -> usize {
         .filter_map(|line| line.parse::<Line>().ok())
         .collect::<Vec<_>>();
 
-    let mut map = HashMap::<Point, usize>::new();
+    let mut map = FxHashMap::<IV, usize>::default();
 
     for line in &lines {
         let dist = line.end - line.start;
         let direction = if dist.y == 0 {
-            Point::new(dist.x.signum(), 0)
+            IV::new(dist.x.signum(), 0)
         } else if dist.x == 0 {
-            Point::new(0, dist.y.signum())
-        } else if part == Part2 && dist.x.abs() == dist.y.abs() {
-            Point::new(dist.x.signum(), dist.y.signum())
+            IV::new(0, dist.y.signum())
+        } else if part == Part::Part2 && dist.x.abs() == dist.y.abs() {
+            IV::new(dist.x.signum(), dist.y.signum())
         } else {
             continue;
         };
@@ -58,6 +58,6 @@ fn day5_test() {
 5,5 -> 8,2"
         .trim();
 
-    assert_eq!(solutions(input, Part1), 5);
-    assert_eq!(solutions(input, Part2), 12);
+    assert_eq!(solutions(input, Part::Part1), 5);
+    assert_eq!(solutions(input, Part::Part2), 12);
 }
