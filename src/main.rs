@@ -3,7 +3,7 @@ use std::env;
 use std::fs;
 use std::time::{Duration, Instant};
 
-use aoc2021::{get_day, noop};
+use aoc2021::get_day;
 
 fn fmt_time(ms: f64) -> String {
     if ms <= 1.0 {
@@ -43,27 +43,30 @@ fn run_day(day: u32) -> std::io::Result<Duration> {
     // Get corresponding function
     let to_run = get_day(day);
     // Time it
-    if to_run.0 != noop {
+    if let Some((f1, f2)) = to_run {
         println!("Day {} - Part 1: ", day);
         let part1_start = Instant::now();
-        println!("    {:?}", to_run.0(input.clone()));
+
+        let ans = f1(&input);
+
         let part1_dur = part1_start.elapsed();
+        println!("    {:?}", ans);
         println!("    Time: {}", fmt_dur(part1_dur));
         total += part1_dur;
-    }
 
-    println!("---------------------");
-
-    if to_run.1 != noop {
+        println!("---------------------");
         println!("Day {} - Part 2: ", day);
+
         let part2_start = Instant::now();
-        println!("    {:?}", to_run.1(input.clone()));
+        let ans = f2(&input);
         let part2_dur = part2_start.elapsed();
+
+        println!("    {:?}", ans);
         println!("    Time: {}", fmt_dur(part2_dur));
-        total += part2_dur
+        total += part2_dur;
+        println!("---------------------");
     }
 
-    println!("---------------------");
     Ok(total)
 }
 
@@ -78,7 +81,7 @@ fn main() -> std::io::Result<()> {
     } else {
         let mut total = Duration::new(0, 0);
         let mut n = 1;
-        while get_day(n) != (noop, noop) {
+        while let Some(_) = get_day(n) {
             total += run_day(n)?;
             n += 1;
         }
