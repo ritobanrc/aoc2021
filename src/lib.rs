@@ -3,6 +3,7 @@ mod day02;
 mod day03;
 mod day04;
 mod day05;
+mod day06;
 
 pub fn noop(_inp: String) -> Box<dyn std::fmt::Debug> {
     Box::new(())
@@ -27,7 +28,9 @@ macro_rules! aoc {
             paste::item! { let ans = [<day $day>]::solutions(&input, Part::Part1); }
             assert_eq!(ans, $ans1);
             Box::new(ans)
-        }, |input| Box::new([<day $day>]::solutions(&input, Part::Part2))
+        }, |input| {
+            paste::item! { Box::new([<day $day>]::solutions(&input, Part::Part2)) }
+        }
         )
     };
     (with_enum:$day: expr, $ans1: expr, $ans2: expr) => {
@@ -77,6 +80,7 @@ pub fn get_day(day: u32) -> (DayFn, DayFn) {
         3 => aoc!(03, 4139586, 1800151),
         4 => aoc!(04, 58374, 11377),
         5 => aoc!(with_enum: 05, 6572, 21466),
+        6 => aoc!(with_enum: 06, 365862),
         _ => {
             eprintln!("Unknown day: {}", day);
             return (noop, noop);
