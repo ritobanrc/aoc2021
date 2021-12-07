@@ -7,12 +7,8 @@ fn simulate_fish(lanternfish: Vec<u8>, days: usize) -> usize {
     }
 
     for _day in 0..days {
-        let new_fish = counts[0];
-        for left in 0..counts.len() - 1 {
-            counts[left] = counts[left + 1];
-        }
-        counts[8] = new_fish;
-        counts[6] += new_fish;
+        counts.rotate_left(1);
+        counts[6] += counts[8];
     }
 
     counts.iter().sum()
