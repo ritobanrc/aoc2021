@@ -49,34 +49,25 @@ pub fn part2(input: &str) -> usize {
                 .split_whitespace()
                 .map(|n| parse_lights(n))
                 .collect::<Vec<_>>();
-            let num = num
-                .split_whitespace()
-                .map(|n| parse_lights(n))
-                .collect::<Vec<_>>();
 
             let perm = (0..7)
                 .permutations(7)
                 .filter(|perm| {
-                    for digit in &digits {
-                        let permuted = permute_bits(perm, *digit);
-                        if lights_to_digit(permuted).is_none() {
-                            return false;
-                        }
-                    }
-                    true
+                    digits
+                        .iter()
+                        .all(|digit| lights_to_digit(permute_bits(perm, *digit)).is_some())
                 })
                 .next()
                 .unwrap();
 
-            let mut r = 0;
-            for (i, digit) in num.iter().rev().enumerate() {
-                let permuted = permute_bits(&perm, *digit);
-                r += 10usize.pow(i as u32) * lights_to_digit(permuted).unwrap();
-            }
-            r
-            //num.split_whitespace()
-            //.filter(|digit| matches!(digit.len(), 2 | 4 | 3 | 7))
-            //.count()
+            num.split_whitespace()
+                .map(|n| parse_lights(n))
+                .rev()
+                .enumerate()
+                .map(|(i, digit)| {
+                    10usize.pow(i as u32) * lights_to_digit(permute_bits(&perm, digit)).unwrap()
+                })
+                .sum::<usize>()
         })
         .sum()
 }
