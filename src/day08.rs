@@ -1,4 +1,5 @@
 use itertools::Itertools;
+use std::convert::TryFrom;
 
 pub fn part1(input: &str) -> usize {
     input
@@ -63,7 +64,7 @@ pub fn part2(input: &str) -> usize {
                     .iter()
                     .all(|digit| lights_to_digit(permute_bits(perm, *digit)).is_some())
                 {
-                    final_perm = Some(perm.to_owned());
+                    final_perm = Some(<[usize; 7]>::try_from(perm).unwrap());
                 }
             });
 
@@ -73,7 +74,7 @@ pub fn part2(input: &str) -> usize {
                 .enumerate()
                 .map(|(i, digit)| {
                     10usize.pow(i as u32)
-                        * lights_to_digit(permute_bits(&final_perm.as_ref().unwrap(), digit))
+                        * lights_to_digit(permute_bits(final_perm.as_ref().unwrap(), digit))
                             .unwrap()
                 })
                 .sum::<usize>()
