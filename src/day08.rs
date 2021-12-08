@@ -53,22 +53,28 @@ pub fn part2(input: &str) -> usize {
                 .map(|n| parse_lights(n))
                 .collect::<Vec<_>>();
 
-            let perm = (0..7)
-                .permutations(7)
-                .filter(|perm| {
-                    digits
-                        .iter()
-                        .all(|digit| lights_to_digit(permute_bits(perm, *digit)).is_some())
-                })
-                .next()
-                .unwrap();
+            use permutator::heap_permutation;
+            let mut range = [0, 1, 2, 3, 4, 5, 6];
+            let mut final_perm = None;
+            heap_permutation(&mut range, |perm| {
+                if final_perm.is_some() {
+                    return;
+                } else if digits
+                    .iter()
+                    .all(|digit| lights_to_digit(permute_bits(perm, *digit)).is_some())
+                {
+                    final_perm = Some(perm.to_owned());
+                }
+            });
 
             num.split_whitespace()
                 .map(|n| parse_lights(n))
                 .rev()
                 .enumerate()
                 .map(|(i, digit)| {
-                    10usize.pow(i as u32) * lights_to_digit(permute_bits(&perm, digit)).unwrap()
+                    10usize.pow(i as u32)
+                        * lights_to_digit(permute_bits(&final_perm.as_ref().unwrap(), digit))
+                            .unwrap()
                 })
                 .sum::<usize>()
         })
