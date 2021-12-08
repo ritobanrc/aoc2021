@@ -21,12 +21,15 @@ fn parse_lights(num: &str) -> u8 {
 }
 
 fn lights_to_digit(display: u8) -> Option<usize> {
-    let lights = [
-        "abcefg", "cf", "acdeg", "acdfg", "bcdf", "abdfg", "abdefg", "acf", "abcdefg", "abcdfg",
-    ]
-    .map(|x| parse_lights(x));
+    use once_cell::sync::Lazy;
+    static LIGHTS: Lazy<[u8; 10]> = Lazy::new(|| {
+        [
+            "abcefg", "cf", "acdeg", "acdfg", "bcdf", "abdfg", "abdefg", "acf", "abcdefg", "abcdfg",
+        ]
+        .map(|x| parse_lights(x))
+    });
 
-    lights.iter().position(|&x| x == display)
+    LIGHTS.iter().position(|&x| x == display)
 }
 
 fn permute_bits(permutation: &[usize], num: u8) -> u8 {
