@@ -8,12 +8,12 @@ use aoc2021::get_day;
 fn fmt_time(ms: f64) -> String {
     if ms <= 1.0 {
         let micro_sec = ms * 1000.0;
-        return String::from(format!("{}µs", micro_sec.round()));
+        return format!("{}µs", micro_sec.round());
     }
     if ms < 1000.0 {
         let whole_ms = ms.floor();
         let rem_ms = ms - whole_ms;
-        return String::from(format!("{}ms ", whole_ms) + &fmt_time(rem_ms));
+        return format!("{}ms ", whole_ms) + &fmt_time(rem_ms);
     }
     let sec: f64 = ms / 1000.0;
     if sec < 60.0 {
@@ -22,11 +22,11 @@ fn fmt_time(ms: f64) -> String {
         return format!("{}s ", whole_sec) + &fmt_time(rem_ms);
     }
     let min: f64 = sec / 60.0;
-    return format!("{}m ", min.floor()) + &fmt_time((sec % 60.0) * 1000.0);
+    format!("{}m ", min.floor()) + &fmt_time((sec % 60.0) * 1000.0)
 }
 
 fn fmt_dur(dur: Duration) -> String {
-    return fmt_time(dur.as_secs_f64() * 1000.0);
+    fmt_time(dur.as_secs_f64() * 1000.0)
 }
 
 fn run_day(day: u32) -> std::io::Result<Duration> {
@@ -81,7 +81,7 @@ fn main() -> std::io::Result<()> {
     } else {
         let mut total = Duration::new(0, 0);
         let mut n = 1;
-        while let Some(_) = get_day(n) {
+        while get_day(n).is_some() {
             total += run_day(n)?;
             n += 1;
         }

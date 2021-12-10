@@ -58,11 +58,10 @@ pub fn part2(input: &str) -> usize {
             let mut range = [0, 1, 2, 3, 4, 5, 6];
             let mut final_perm = None;
             heap_permutation(&mut range, |perm| {
-                if final_perm.is_some() {
-                    return;
-                } else if digits
-                    .iter()
-                    .all(|digit| lights_to_digit(permute_bits(perm, *digit)).is_some())
+                if final_perm.is_none()
+                    && digits
+                        .iter()
+                        .all(|digit| lights_to_digit(permute_bits(perm, *digit)).is_some())
                 {
                     final_perm = Some(<[usize; 7]>::try_from(perm).unwrap());
                 }

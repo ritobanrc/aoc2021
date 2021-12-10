@@ -67,8 +67,8 @@ pub fn part1(input: &str) -> u32 {
     for num in numbers {
         for board in boards.iter_mut() {
             update_board(board, num);
-            if check_win(&board) {
-                return num * calc_unmarked_sum(&board);
+            if check_win(board) {
+                return num * calc_unmarked_sum(board);
             }
         }
     }
@@ -91,10 +91,10 @@ pub fn part2(input: &str) -> u32 {
             }
             update_board(board, num);
 
-            if check_win(&board) {
+            if check_win(board) {
                 boards_won[i] = true;
                 if boards_won.iter().all(|x| *x) {
-                    return num * calc_unmarked_sum(&board);
+                    return num * calc_unmarked_sum(board);
                 }
             }
         }

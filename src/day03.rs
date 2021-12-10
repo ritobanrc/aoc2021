@@ -61,7 +61,7 @@ pub fn part2(input: &str) -> u32 {
         .map(|x| x.bytes().map(|x| x - b'0').collect::<Vec<_>>())
         .collect();
     let o2 = filter(nums.clone(), true);
-    let co2 = filter(nums.clone(), false);
+    let co2 = filter(nums, false);
 
     o2 * co2
 }
