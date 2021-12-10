@@ -82,7 +82,7 @@ pub fn get_day(day: u32) -> Option<(DayFn, DayFn)> {
         6 => aoc!(with_enum: 06, 365862, 1653250886439),
         7 => aoc!(07, 357353, 104822130),
         8 => aoc!(08, 284, 973499),
-        9 => aoc!(09, 439),
+        9 => aoc!(09, 439, 900900),
         _ => {
             eprintln!("Unknown day: {}", day);
             return None;
