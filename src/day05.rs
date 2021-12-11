@@ -1,7 +1,6 @@
 use crate::Part;
 use nalgebra::Vector2;
 use parse_display::{Display, FromStr};
-use rustc_hash::FxHashMap;
 
 type IV = Vector2<i32>;
 
@@ -20,7 +19,7 @@ pub fn solutions(input: &str, part: Part) -> usize {
         .filter_map(|line| line.parse::<Line>().ok())
         .collect::<Vec<_>>();
 
-    let mut map = FxHashMap::<IV, usize>::default();
+    let mut map = vec![vec![0; 1000]; 1000];
 
     for line in &lines {
         let dist = line.end - line.start;
@@ -36,12 +35,15 @@ pub fn solutions(input: &str, part: Part) -> usize {
 
         let mut current = line.start;
         while current != line.end + direction {
-            map.entry(current).and_modify(|x| *x += 1).or_insert(1);
+            map[current.y as usize][current.x as usize] += 1;
             current += direction;
         }
     }
 
-    map.values().filter(|&&x| x >= 2).count()
+    map.iter()
+        .flat_map(|x| x.iter())
+        .filter(|&&x| x >= 2)
+        .count()
 }
 
 #[test]
