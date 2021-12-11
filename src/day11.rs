@@ -70,16 +70,3 @@ pub fn solutions(input: &str, part: Part) -> usize {
         Part::Part2 => unreachable!(),
     }
 }
-
-#[test]
-fn day11_test() {
-    let input = "
-11111
-19991
-19191
-19991
-11111"
-        .trim();
-
-    part1(input);
-}
