@@ -1,10 +1,9 @@
-use rustc_hash::FxHashMap as HashMap;
 use std::cmp::Reverse;
 use std::collections::BinaryHeap;
 
 #[derive(Eq, Ord)]
 struct QueueEntry {
-    pos: (i64, i64),
+    pos: (usize, usize),
     f_score: usize,
 }
 
@@ -19,9 +18,9 @@ impl PartialOrd for QueueEntry {
     }
 }
 
-fn dist(a: (i64, i64), b: (i64, i64)) -> usize {
-    let d0 = a.0 - b.0;
-    let d1 = a.1 - b.1;
+fn dist(a: (usize, usize), b: (usize, usize)) -> usize {
+    let d0 = b.0 - a.0;
+    let d1 = b.1 - a.1;
     ((d0 * d0 + d1 * d1) as f64).sqrt().round() as usize
 }
 
@@ -34,14 +33,17 @@ fn pathfind(map: &[Vec<u8>]) -> usize {
         f_score: 0,
     }));
 
-    let mut prev = HashMap::<(i64, i64), _>::default();
+    let width = map[0].len();
+    let height = map.len();
 
-    let mut g_score = HashMap::<(i64, i64), _>::default();
-    let mut f_score = HashMap::<(i64, i64), _>::default();
+    let mut prev = vec![vec![None; width]; height];
 
-    g_score.insert(start, 0);
+    let mut g_score = vec![vec![usize::MAX << 1; width]; height];
+    let mut f_score = vec![vec![usize::MAX << 1; width]; height];
 
-    let end = (map[0].len() as i64 - 1, map.len() as i64 - 1);
+    g_score[start.1][start.0] = 0;
+
+    let end = (map[0].len() - 1, map.len() - 1);
 
     while let Some(Reverse(entry)) = open_set.pop() {
         let pos = entry.pos;
@@ -51,26 +53,24 @@ fn pathfind(map: &[Vec<u8>]) -> usize {
         }
 
         let neighbors = [
-            (pos.0 - 1, pos.1),
+            (pos.0.wrapping_sub(1), pos.1),
             (pos.0 + 1, pos.1),
-            (pos.0, pos.1 - 1),
+            (pos.0, pos.1.wrapping_sub(1)),
             (pos.0, pos.1 + 1),
         ];
 
         for neighbor in neighbors {
-            if neighbor.0 < 0
-                || neighbor.1 < 0
-                || neighbor.0 >= map[0].len() as i64
-                || neighbor.1 >= map[0].len() as i64
-            {
+            if neighbor.0 >= map[0].len() || neighbor.1 >= map[0].len() {
                 continue;
             }
-            let alt = g_score[&pos] + map[pos.1 as usize][pos.0 as usize] as usize;
-            if alt < *g_score.get(&neighbor).unwrap_or(&usize::MAX) {
-                prev.insert(neighbor, Some(pos));
-                g_score.insert(neighbor, alt);
+            let alt = g_score[pos.1][pos.0] + map[pos.1][pos.0] as usize;
+            if alt < g_score[neighbor.1][neighbor.0] {
+                prev[neighbor.1][neighbor.0] = Some(pos);
+                g_score[neighbor.1][neighbor.0] = alt;
+
                 let new_f_score = alt + dist(neighbor, end);
-                f_score.insert(neighbor, new_f_score);
+                f_score[neighbor.1][neighbor.0] = new_f_score;
+
                 open_set.push(Reverse(QueueEntry {
                     pos: neighbor,
                     f_score: new_f_score,
@@ -82,8 +82,8 @@ fn pathfind(map: &[Vec<u8>]) -> usize {
     let mut current = end;
     let mut total_risk = 0;
     while current != start {
-        total_risk += map[current.1 as usize][current.0 as usize] as usize;
-        current = prev[&current].unwrap();
+        total_risk += map[current.1][current.0] as usize;
+        current = prev[current.1][current.0].unwrap();
     }
 
     total_risk
