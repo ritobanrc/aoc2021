@@ -1,4 +1,22 @@
-use std::collections::{HashMap, HashSet};
+use std::cmp::Reverse;
+use std::collections::{BinaryHeap, HashMap};
+
+#[derive(Eq, Ord)]
+struct QueueEntry {
+    pos: (i64, i64),
+    f_score: usize,
+}
+
+impl PartialEq for QueueEntry {
+    fn eq(&self, other: &Self) -> bool {
+        self.f_score.eq(&other.f_score)
+    }
+}
+impl PartialOrd for QueueEntry {
+    fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+        self.f_score.partial_cmp(&other.f_score)
+    }
+}
 
 fn dist(a: (i64, i64), b: (i64, i64)) -> usize {
     let d0 = a.0 - b.0;
@@ -9,8 +27,12 @@ fn dist(a: (i64, i64), b: (i64, i64)) -> usize {
 fn pathfind(map: &[Vec<u8>]) -> usize {
     let start = (0, 0);
 
-    let mut open_set = Vec::new();
-    open_set.push(start);
+    let mut open_set = BinaryHeap::new();
+    open_set.push(Reverse(QueueEntry {
+        pos: start,
+        f_score: 0,
+    }));
+
     let mut prev = HashMap::<(i64, i64), _>::new();
 
     let mut g_score = HashMap::<(i64, i64), _>::new();
@@ -20,13 +42,8 @@ fn pathfind(map: &[Vec<u8>]) -> usize {
 
     let end = (map[0].len() as i64 - 1, map.len() as i64 - 1);
 
-    while let Some((i, pos)) = open_set
-        .iter()
-        .enumerate()
-        .min_by_key(|(_, v)| f_score.get(v).unwrap_or(&usize::MAX))
-    {
-        let pos = pos.clone();
-        open_set.remove(i);
+    while let Some(Reverse(entry)) = open_set.pop() {
+        let pos = entry.pos;
 
         if pos == end {
             break;
@@ -51,8 +68,12 @@ fn pathfind(map: &[Vec<u8>]) -> usize {
             if alt < *g_score.get(&neighbor).unwrap_or(&usize::MAX) {
                 prev.insert(neighbor, Some(pos));
                 g_score.insert(neighbor, alt);
-                f_score.insert(neighbor, alt + dist(neighbor, end));
-                open_set.push(neighbor);
+                let new_f_score = alt + dist(neighbor, end);
+                f_score.insert(neighbor, new_f_score);
+                open_set.push(Reverse(QueueEntry {
+                    pos: neighbor,
+                    f_score: new_f_score,
+                }));
             }
         }
     }
