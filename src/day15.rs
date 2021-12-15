@@ -1,5 +1,6 @@
+use rustc_hash::FxHashMap as HashMap;
 use std::cmp::Reverse;
-use std::collections::{BinaryHeap, HashMap};
+use std::collections::BinaryHeap;
 
 #[derive(Eq, Ord)]
 struct QueueEntry {
@@ -33,10 +34,10 @@ fn pathfind(map: &[Vec<u8>]) -> usize {
         f_score: 0,
     }));
 
-    let mut prev = HashMap::<(i64, i64), _>::new();
+    let mut prev = HashMap::<(i64, i64), _>::default();
 
-    let mut g_score = HashMap::<(i64, i64), _>::new();
-    let mut f_score = HashMap::<(i64, i64), _>::new();
+    let mut g_score = HashMap::<(i64, i64), _>::default();
+    let mut f_score = HashMap::<(i64, i64), _>::default();
 
     g_score.insert(start, 0);
 
