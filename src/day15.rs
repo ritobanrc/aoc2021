@@ -4,24 +4,18 @@ use std::collections::BinaryHeap;
 #[derive(Eq, Ord)]
 struct QueueEntry {
     pos: (usize, usize),
-    f_score: usize,
+    dist: usize,
 }
 
 impl PartialEq for QueueEntry {
     fn eq(&self, other: &Self) -> bool {
-        self.f_score.eq(&other.f_score)
+        self.dist.eq(&other.dist)
     }
 }
 impl PartialOrd for QueueEntry {
     fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
-        self.f_score.partial_cmp(&other.f_score)
+        self.dist.partial_cmp(&other.dist)
     }
-}
-
-fn dist(a: (usize, usize), b: (usize, usize)) -> usize {
-    let d0 = b.0 - a.0;
-    let d1 = b.1 - a.1;
-    d0 + d1
 }
 
 fn pathfind(map: &[Vec<u8>]) -> usize {
@@ -30,7 +24,7 @@ fn pathfind(map: &[Vec<u8>]) -> usize {
     let mut open_set = BinaryHeap::new();
     open_set.push(Reverse(QueueEntry {
         pos: start,
-        f_score: 0,
+        dist: 0,
     }));
 
     let width = map[0].len();
@@ -38,10 +32,9 @@ fn pathfind(map: &[Vec<u8>]) -> usize {
 
     let mut prev = vec![vec![None; width]; height];
 
-    let mut g_score = vec![vec![usize::MAX << 1; width]; height];
-    let mut f_score = vec![vec![usize::MAX << 1; width]; height];
+    let mut dist = vec![vec![usize::MAX << 1; width]; height];
 
-    g_score[start.1][start.0] = 0;
+    dist[start.1][start.0] = 0;
 
     let end = (map[0].len() - 1, map.len() - 1);
 
@@ -63,17 +56,14 @@ fn pathfind(map: &[Vec<u8>]) -> usize {
             if neighbor.0 >= map[0].len() || neighbor.1 >= map[0].len() {
                 continue;
             }
-            let alt = g_score[pos.1][pos.0] + map[pos.1][pos.0] as usize;
-            if alt < g_score[neighbor.1][neighbor.0] {
+            let alt = dist[pos.1][pos.0] + map[pos.1][pos.0] as usize;
+            if alt < dist[neighbor.1][neighbor.0] {
                 prev[neighbor.1][neighbor.0] = Some(pos);
-                g_score[neighbor.1][neighbor.0] = alt;
-
-                let new_f_score = alt + dist(neighbor, end);
-                f_score[neighbor.1][neighbor.0] = new_f_score;
+                dist[neighbor.1][neighbor.0] = alt;
 
                 open_set.push(Reverse(QueueEntry {
                     pos: neighbor,
-                    f_score: new_f_score,
+                    dist: alt,
                 }));
             }
         }
