@@ -21,7 +21,7 @@ impl PartialOrd for QueueEntry {
 fn dist(a: (usize, usize), b: (usize, usize)) -> usize {
     let d0 = b.0 - a.0;
     let d1 = b.1 - a.1;
-    ((d0 * d0 + d1 * d1) as f64).sqrt().round() as usize
+    d0 + d1
 }
 
 fn pathfind(map: &[Vec<u8>]) -> usize {
