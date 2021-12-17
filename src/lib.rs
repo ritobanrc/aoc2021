@@ -11,6 +11,7 @@ mod day10;
 mod day11;
 mod day12;
 mod day15;
+mod day17;
 
 pub type DayFn = fn(&str) -> Box<dyn std::fmt::Debug>;
 
@@ -91,6 +92,7 @@ pub fn get_day(day: u32) -> Option<(DayFn, DayFn)> {
         11 => aoc!(with_enum: 11, 1773, 494),
         12 => aoc!(12),
         15 => aoc!(15, 685, 2995),
+        17 => aoc!(with_enum: 17, 3003, 940),
         _ => {
             eprintln!("Unknown day: {}", day);
             return None;
