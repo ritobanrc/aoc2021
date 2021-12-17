@@ -7,7 +7,7 @@ type IV = Vector2<i64>;
 fn simulate(mut vel: IV, target: Target) -> Option<i64> {
     let mut pos = IV::zeros();
     let mut highest = 0;
-    for _ in 0..10000 {
+    for _ in 0..200 {
         pos += vel;
         vel.x -= vel.x.signum();
         vel.y -= 1;
@@ -17,6 +17,10 @@ fn simulate(mut vel: IV, target: Target) -> Option<i64> {
 
         if target[0].contains(&pos.x) && target[1].contains(&pos.y) {
             return Some(highest);
+        } else if pos.y < *target[1].start() {
+            return None;
+        } else if pos.x > *target[0].end() {
+            return None;
         }
     }
     None
@@ -30,7 +34,7 @@ pub fn solutions(_input: &str, part: crate::Part) -> i64 {
     let mut count = 0;
 
     for x_vel in 0..300 {
-        for y_vel in -300..300 {
+        for y_vel in -80..80 {
             let out = simulate(IV::new(x_vel, y_vel), [x_range.clone(), y_range.clone()]);
             if let Some(peak) = out {
                 count += 1;
