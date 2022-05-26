@@ -10,6 +10,7 @@ mod day09;
 mod day10;
 mod day11;
 mod day12;
+mod day13;
 mod day15;
 mod day17;
 
@@ -91,6 +92,7 @@ pub fn get_day(day: u32) -> Option<(DayFn, DayFn)> {
         10 => aoc!(10, 374061, 2116639949),
         11 => aoc!(with_enum: 11, 1773, 494),
         12 => aoc!(12),
+        13 => aoc!(13, 837),
         15 => aoc!(15, 685, 2995),
         17 => aoc!(with_enum: 17, 3003, 940),
         _ => {
