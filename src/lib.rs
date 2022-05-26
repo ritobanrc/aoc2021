@@ -94,7 +94,7 @@ pub fn get_day(day: u32) -> Option<(DayFn, DayFn)> {
         11 => aoc!(with_enum: 11, 1773, 494),
         12 => aoc!(12),
         13 => aoc!(13, 837),
-        14 => aoc!(with_enum: 14, 2194),
+        14 => aoc!(with_enum: 14, 2194, 2360298895777),
         15 => aoc!(15, 685, 2995),
         17 => aoc!(with_enum: 17, 3003, 940),
         _ => {
